@@ -2,35 +2,30 @@ package com.pedraimperial.model;
 
 import java.sql.Timestamp;
 
-public class Visitante {
+public class Visitante extends Pessoa{
     private int id;
-    private String nome;
-    private String cpf;
     private Timestamp dataEntrada;
     private Timestamp dataSaida;
     private int idMorador;
 
     // Construtor
     public Visitante(int id, String nome, String cpf, Timestamp dataEntrada, Timestamp dataSaida, int idMorador) {
+        super(nome, cpf);
         this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
         this.dataEntrada = dataEntrada;
         this.dataSaida = dataSaida;
         this.idMorador = idMorador;
     }
 
     public Visitante(String nome, String cpf, Timestamp dataEntrada, Timestamp dataSaida, int idMorador) {
-        this.nome = nome;
-        this.cpf = cpf;
+        super(nome, cpf);
         this.dataEntrada = dataEntrada;
         this.dataSaida = dataSaida;
         this.idMorador = idMorador;
     }
 
     public Visitante(String nome, String cpf, Timestamp dataEntrada, int idMorador) {
-        this.nome = nome;
-        this.cpf = cpf;
+        super(nome, cpf);
         this.dataEntrada = dataEntrada;
         this.idMorador = idMorador;
     }
@@ -42,22 +37,6 @@ public class Visitante {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public Timestamp getDataEntrada() {
@@ -84,15 +63,18 @@ public class Visitante {
         this.idMorador = idMorador;
     }
 
+
     @Override
     public String toString() {
         return "Visitante{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", dataEntrada=" + dataEntrada +
-                ", dataSaida=" + dataSaida +
-                ", idMorador=" + idMorador +
+                "id=" + getId() +
+                ", nome='" + getNome() + '\'' +
+                ", cpf='" + getCpf() + '\'' +
+                ", dataEntrada=" + getDataEntrada() +
+                ", dataSaida=" + getDataSaida() +
+                ", idMorador=" + getIdMorador() +
                 '}';
     }
+
+   
 }

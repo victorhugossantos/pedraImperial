@@ -1,94 +1,50 @@
 package com.pedraimperial.model;
 
-public class Morador {
+public class Morador extends Pessoa{
+
     private int id;
-    private String nome;
-    private String cpf;
-    private String telefone;
-    private String email;
     private String bloco;
     private int unidade;
 
     // Construtor
     public Morador(int id, String nome, String cpf, String bloco, int unidade) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.bloco = bloco;
-        this.unidade = unidade;
+       super (nome, cpf);
+       this.id = id;
+       this.bloco = bloco;
+       this.unidade = unidade;
     }
 
     public Morador (String nome, String cpf, String bloco, int unidade) {
-        this.nome = nome;
-        this.cpf = cpf;
+        super(nome, cpf);
         this.bloco = bloco;
         this.unidade = unidade;
     }
 
     public Morador(String nome, String cpf, String telefone, String email, String bloco, int unidade) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.telefone = telefone;
-        this.email = email;
+        super(nome, cpf, telefone, email);
         this.bloco = bloco;
         this.unidade = unidade;
+   
     }
 
     public Morador (int id, String nome, String cpf, String telefone, String email, String bloco, int unidade) {
+        super(nome, cpf, telefone, email);
         this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.telefone = telefone;
-        this.email = email;
         this.bloco = bloco;
         this.unidade = unidade;
     }
-
-
     // Metodos
-    public int getId(){
+    
+
+    public int getId() {
         return id;
     }
 
     public void setId(int id) {
-        //O id sera feito automaticamento por um outro metodo
         this.id = id;
     }
 
-    public String getNome(){
-        return nome;
-    }
-
-    public void setNome(String nome){
-        this.nome = nome;
-
-    }
-
-    public String getCpf(){
-        return cpf;
-    }
-
-    public void setCpf(String cpf){
-        this.cpf = cpf;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getBloco(){
+    public String getBloco() {
         return bloco;
     }
 
@@ -96,7 +52,7 @@ public class Morador {
         this.bloco = bloco;
     }
 
-    public int getUnidade(){
+    public int getUnidade() {
         return unidade;
     }
 
@@ -107,13 +63,13 @@ public class Morador {
     @Override
     public String toString() {
         return "Morador{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", email='" + email + '\'' +
-                ", bloco='" + bloco + '\'' +
-                ", unidade=" + unidade +
+                "id=" + getId() +
+                ", nome='" + getNome() + '\'' +
+                ", cpf='" + getCpf() + '\'' +
+                ", telefone='" + getTelefone() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", bloco='" + getBloco() + '\'' +
+                ", unidade=" + getUnidade() +
                 '}';
     }
 }

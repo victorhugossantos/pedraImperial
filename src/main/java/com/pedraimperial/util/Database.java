@@ -17,6 +17,7 @@ public class Database {
             System.out.println("Conexao realizada com sucesso");
         } catch (SQLException e) {
             System.err.println("erro ao se conectar ao banco de dados: "  + e.getMessage());
+            e.printStackTrace();
         }
     }
 
