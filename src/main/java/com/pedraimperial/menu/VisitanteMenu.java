@@ -18,24 +18,12 @@ public class VisitanteMenu {
             scanner.nextLine();
 
             switch (option) {
-                case 1:
-                    addVisitante(scanner);
-                    break;
-                case 2:
-                    searchVisitante(scanner);
-                    break;
-                case 3: 
-                    deleteVisitante(scanner);
-                    break;
-                case 4: 
-                    listarVisitantes(scanner);
-                    break;
-                case 0:
-                    System.out.println("Voltando ao menu principal");
-                    break;
-                default:
-                    System.out.println("Opcao incorreta, tente novamente.");
-                    break;
+                case 1 -> addVisitante(scanner);
+                case 2 -> searchVisitante(scanner);
+                case 3 -> deleteVisitante(scanner);
+                case 4 -> listarVisitantes(scanner);
+                case 0 -> System.out.println("Voltando ao menu principal");
+                default -> System.out.println("Opcao incorreta, tente novamente.");
             } 
         } while (option != 0);
     }

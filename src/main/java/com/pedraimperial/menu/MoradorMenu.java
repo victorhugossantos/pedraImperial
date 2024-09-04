@@ -13,10 +13,11 @@ public class MoradorMenu {
         do { 
             System.out.println("\n++++ Gerenciar Moradores ++++");
             System.out.println("1. Adicionar Morador");
-            System.out.println("2. Buscar Morador por ID");
-            System.out.println("3. Atualizar Morador");
-            System.out.println("4. Deletar Morador");
-            System.out.println("5. Listar Todos os Moradores");
+            System.out.println("2. Buscar Morador por nome");
+            System.out.println("3. Buscar Morador por unidade");
+            System.out.println("4. Atualizar Morador");
+            System.out.println("5. Deletar Morador");
+            System.out.println("6. Listar Todos os Moradores");
             System.out.println("0. Voltar ao Menu Principal");
             System.out.print("Escolha uma opcao: ");
 
@@ -24,27 +25,14 @@ public class MoradorMenu {
             scanner.nextLine();
 
             switch (option) {
-                case 1:
-                    addMorador(scanner);
-                    break;
-                case 2:
-                    searchMorador(scanner);
-                    break;
-                // case 3:
-                //     updateMorador(scanner);
-                //     break;
-                case 4:
-                    deleteMorador(scanner);
-                    break;
-                case 5:
-                    listarMoradores();
-                    break;
-                case 0: 
-                    System.out.println("Voltando ao menu principal");
-                    break;
-                default:
-                    System.out.println("Opcao incorreta, tente novamente ");
-                    break;
+                case 1 -> addMorador(scanner);
+                case 2 -> searchMoradorByNome(scanner);
+                case 3 -> searchMoradorByUnidade(scanner);
+                case 4 -> updateMorador(scanner);
+                case 5 -> deleteMorador(scanner);
+                case 6 -> listarMoradores();
+                case 0 -> System.out.println("Voltando ao menu principal");
+                default -> System.out.println("Opcao incorreta, tente novamente ");
             }
         } while (option != 0);
     }
@@ -69,29 +57,64 @@ public class MoradorMenu {
         boolean sucesso = MoradorDAO.addMorador(morador);
 
         if(sucesso) {
-            System.out.println("Morador adicionado com sucesso");
+            System.out.println("Morador adicionado com sucesso, ID: " + morador.getId());
         } else {
             System.out.println("Falha ao adicionar morador.");
         }
     }
 
-    private static void searchMorador(Scanner scanner) {
-        System.out.println("\n++++ Buscar morador por id ++++");
-        System.out.print("Digite o ID do morador: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+    private static void searchMoradorByNome(Scanner scanner) {
+        System.out.println("\n++++ Buscar morador por nome ++++");
+        System.out.print("Digite o nome do morador: ");
+        String nome = scanner.nextLine();
 
-        Morador morador = MoradorDAO.getMoradorById(id);
+        List<Morador> moradores = MoradorDAO.getMoradoresByName(nome);
 
-        if (morador != null) {
-            System.out.println("Morador encontrado: " + morador);
+        if (moradores.isEmpty()) {
+            System.out.println("Nenhum morador encontrado com o nome fornecido");
         } else {
-            System.out.println("Morador nao encontrado. ");
+            for(Morador morador: moradores) {
+                System.out.println("-----------------------------"); 
+                System.out.println("ID: " + morador.getId());
+                System.out.println("Nome: " + morador.getNome());
+                System.out.println("CPF: " + morador.getCpf());
+                System.out.println("Telefone: " + morador.getTelefone());
+                System.out.println("Email: " + morador.getEmail());
+                System.out.println("Bloco: " + morador.getBloco());
+                System.out.println("Unidade: " + morador.getUnidade());
+                System.out.println("-----------------------------"); 
+            }
+        }
+    }
+
+    private static void searchMoradorByUnidade(Scanner scanner) {
+
+        System.out.println("++++ Buscar Morador por Unidade ++++");
+
+        System.out.print("Bloco: ");
+        String bloco = scanner.nextLine();
+        System.out.print("Unidade: ");
+        int unidade = scanner.nextInt();
+    
+
+        Morador morador = MoradorDAO.getMoradorByBlocoUnidade(bloco, unidade);
+
+        if (morador != null ) {
+            System.out.println("-----------------------------"); 
+            System.out.println("ID: " + morador.getId());
+            System.out.println("Nome: " + morador.getNome());
+            System.out.println("CPF: " + morador.getCpf());
+            System.out.println("Telefone: " + morador.getTelefone());
+            System.out.println("Email: " + morador.getEmail());
+            System.out.println("Bloco: " + morador.getBloco());
+            System.out.println("Unidade: " + morador.getUnidade());
+            System.out.println("-----------------------------"); 
+        } else {
+            System.out.println("Nenhum morador encontrado");
         }
     }
 
     private static void deleteMorador(Scanner scanner) {
-
         System.out.println("\n ++++ Deletar morador ++++");
         System.out.print("Digite o ID do morador para deletar: ");
         int id = scanner.nextInt();
@@ -114,6 +137,7 @@ public class MoradorMenu {
             System.out.println("Nenhum morador encontrado");
         } else {
             for (Morador morador: moradores) {
+                System.out.println("-----------------------------"); 
                 System.out.println("ID: " + morador.getId());
                 System.out.println("Nome: " + morador.getNome());
                 System.out.println("CPF: " + morador.getCpf());
@@ -123,6 +147,33 @@ public class MoradorMenu {
                 System.out.println("Unidade: " + morador.getUnidade());
                 System.out.println("-----------------------------"); 
             }
+        }
+    }
+
+    private static void updateMorador(Scanner scanner) {
+        System.out.println("\n ++++ Atualizar Morador ++++");
+        System.out.print("Nome do Morador a ser atualizado: ");
+        int id = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Novo Nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("CPF: ");
+        String cpf = scanner.nextLine();
+        System.out.print("Telefone: ");
+        String telefone = scanner.nextLine();
+        System.out.print("E-mail: ");
+        String email = scanner.nextLine();
+        System.out.print("Bloco: ");
+        String bloco = scanner.nextLine();
+        System.out.print("Unidade: ");
+        int unidade = scanner.nextInt();
+
+        Morador morador = new Morador(id, nome, cpf, telefone, email, bloco, unidade);
+        boolean sucesso = MoradorDAO.updateMorador(morador);
+        if (sucesso) {
+            System.out.println("Morador atualizado com sucesso");
+        } else {
+            System.out.println("Erro ao atualizar morador.");
         }
     }
 }

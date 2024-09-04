@@ -50,7 +50,8 @@ public class MoradorDAO {
         return sucesso;
     }
 
-    public static Morador getMoradorById(int id) {
+
+    public static Morador getMoradorByID(int id) {
         String sql = "SELECT * FROM moradores WHERE id = ?";
         Morador morador = null;
         // conexoes com o banco de dados
@@ -74,7 +75,7 @@ public class MoradorDAO {
                 int unidade = rs.getInt("unidade");
 
                 // Criando um objeto morador com os dados recuperados 
-                morador = new Morador(nome, cpf, telefone, email, bloco, unidade);   
+                morador = new Morador(id,nome, cpf, telefone, email, bloco, unidade);   
             }
 
         } catch (SQLException e) {
@@ -85,8 +86,122 @@ public class MoradorDAO {
         }
 
         return morador;
+    }
+
+    // Metodo para buscar morador por nome
+    public static Morador getMoradorByName(String nome) {
+        String sql = "SELECT * FROM moradores WHERE nome = ?";
+        Morador morador = null;
+        // conexoes com o banco de dados
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs;
+
+        try {
+            conn = Database.getConnection();
+            st = conn.prepareStatement(sql);
+
+            st.setString(1, nome);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String cpf = rs.getString("cpf");
+                String telefone = rs.getString("telefone");
+                String email = rs.getString("email");
+                String bloco = rs.getString("bloco");
+                int unidade = rs.getInt("unidade");
+
+                // Criando um objeto morador com os dados recuperados 
+                morador = new Morador(id,nome, cpf, telefone, email, bloco, unidade);   
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar morador com ID " + ":" + e.getMessage());
+        } finally {
+            // Fechando a conexao com o banco de dados
+            DBUtils.closeConnection(conn, st, null);
+        }
+
+        return morador;
+    }
+
+
+
+    // Metodo para buscar todos os moradores com o primeiro nome
+    public static List<Morador> getMoradoresByName(String nome) {
+        String sql = "SELECT * FROM moradores WHERE nome LIKE ?";
+        List<Morador> moradores = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            conn = Database.getConnection();
+            st = conn.prepareStatement(sql);
+            st.setString(1, nome + "%");
+            rs = st.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String cpf = rs.getString("cpf");
+                String telefone = rs.getString("telefone");
+                String email = rs.getString("email");
+                String bloco = rs.getString("bloco");
+                int unidade = rs.getInt("unidade");
+
+                // Criando um objeto Morador com os dados recuperados do banco
+                Morador morador = new Morador(id, rs.getString("nome"), cpf, telefone, email, bloco, unidade);
+                moradores.add(morador);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar moradores por nome: " + e.getMessage());
+        } finally {
+            DBUtils.closeConnection(conn, st, rs);
+        }
+
+        return moradores;
+    }
+
+    // metodo para buscar o morador de um bloco e unidade
+    public static Morador getMoradorByBlocoUnidade(String bloco, int unidade) {
+        String sql = "SELECT * FROM moradores WHERE bloco = ? AND unidade = ?";
+        Morador morador = null;
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            conn = Database.getConnection();
+            st = conn.prepareStatement(sql);
+            st.setString(1, bloco);
+            st.setInt(2, unidade);
+            rs = st.executeQuery();
+
+            if (rs.next()){
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String cpf = rs.getString("cpf");
+                String telefone = rs.getString("telefone");
+                String email = rs.getString("email");
+
+                // Criando objeto morador
+
+                morador = new Morador(id, nome, cpf, telefone, email, bloco, unidade);
+            }
+
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar o morador: " + e.getMessage());
+        } finally {
+            DBUtils.closeConnection(conn, st, rs);
+        }
+
+        return morador;
 
     }
+
+
 
     // metodo para listar todos os moradores
 
@@ -157,6 +272,38 @@ public class MoradorDAO {
             
         } catch (SQLException e) {
             System.err.println("Erro ao tentar deletar morador com ID " + id + " " + e.getMessage());
+        } finally {
+            DBUtils.closeConnection(conn, st, null);
+        }
+
+        return sucesso;
+    }
+
+    public static boolean updateMorador(Morador morador) {
+        String sql = "UPDATE moradores SET nome = ?, cpf = ?, telefone = ?, email = ?, bloco = ?, unidade = ? WHERE id = ?";
+        boolean sucesso = false; 
+        Connection conn = null;
+        PreparedStatement st = null;
+
+        try { 
+            conn = Database.getConnection();
+            st = conn.prepareStatement(sql);
+
+            st.setString(1, morador.getNome());
+            st.setString(2, morador.getCpf());
+            st.setString(3, morador.getTelefone());
+            st.setString(4, morador.getEmail());
+            st.setString(5, morador.getBloco());
+            st.setInt(6, morador.getUnidade());
+            st.setInt(7, morador.getId());
+
+            int linhasAfetadas = st.executeUpdate();
+            if (linhasAfetadas > 0 ) {
+                sucesso = true;
+                System.out.println("Morador atualizado com sucesso.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar morador: " + e.getMessage());
         } finally {
             DBUtils.closeConnection(conn, st, null);
         }

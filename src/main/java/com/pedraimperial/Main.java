@@ -8,34 +8,22 @@ import com.pedraimperial.menu.VisitanteMenu;
 public class Main {
     public static void main(String[] args) {
         
-        Scanner scanner = new Scanner(System.in);
-        int option;
-
-        do {
-            showMainMenu();
-            option = scanner.nextInt();
-            scanner.nextLine(); // Consumir uma nova linha apos o uso.
-
-            switch (option) {
-                case 1:
-                    MoradorMenu.menuMorador(scanner);
-                    break;
-                case 2:
-                    VeiculoMenu.menuVeiculos(scanner);
-                    break;
-                case 3:
-                    VisitanteMenu.menuVisitantes(scanner);
-                    break;
-                case 0:
-                    System.out.println("Saindo do programa Gestao Condominial Pedra Imperial");
-                    break;
-                default: 
-                    System.out.println("Opcao incorreta, tente novamente");
-                    break;
-            }
-        } while (option != 0);
-
-        scanner.close();
+        try (Scanner scanner = new Scanner(System.in)) {
+            int option;
+            
+            do {
+                showMainMenu();
+                option = scanner.nextInt();
+                
+                switch (option) {
+                    case 1 -> MoradorMenu.menuMorador(scanner);
+                    case 2 -> VeiculoMenu.menuVeiculos(scanner);
+                    case 3 -> VisitanteMenu.menuVisitantes(scanner);
+                    case 0 -> System.out.println("Saindo do programa Gestao Condominial Pedra Imperial");
+                    default -> System.out.println("Opcao incorreta, tente novamente");
+                }
+            } while (option != 0);
+        }
     }
         // Metodo do menu principal
 

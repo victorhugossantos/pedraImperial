@@ -14,7 +14,7 @@ public class VeiculoDAO {
     
     // Metodo para adiconar um veiculo 
     public static boolean addVeiculo(Veiculo veiculo)  {
-        String sql = "INSERT INTO veiculos (placa, modelo, cor, idMorador) VALEUS (?, ?, ?, ?)";
+        String sql = "INSERT INTO veiculos (placa, modelo, cor, id_morador) VALUES (?, ?, ?, ?)";
         boolean sucesso = false;
         Connection conn = null;
         PreparedStatement st = null;
@@ -62,7 +62,7 @@ public class VeiculoDAO {
             if (rs.next()) {
                 String modelo = rs.getString("Modelo");
                 String cor = rs.getString("Cor");
-                int idMorador = rs.getInt("idMorador");
+                int idMorador = rs.getInt("id_morador");
 
                 veiculo = new Veiculo(placa, modelo, cor, idMorador);
             }
@@ -95,7 +95,7 @@ public class VeiculoDAO {
                 String placa = rs.getString("placa");
                 String modelo = rs.getString("modelo");
                 String cor = rs.getString("cor");
-                int idMorador = rs.getInt("idMorador");
+                int idMorador = rs.getInt("id_morador");
 
                 Veiculo veiculo = new Veiculo(placa, modelo, cor, idMorador);
                 veiculos.add(veiculo);
@@ -140,5 +140,38 @@ public class VeiculoDAO {
 
         return sucesso;
     }
-    
+    // metodo para atualizar o veiculo 
+
+    public static boolean updateVeiculo(Veiculo veiculo) {
+        String sql = "UPDATE veiculos set modelo = ?, cor = ?, id_morador = ? WHERE placa = ?";
+        boolean sucesso = false;
+        Connection conn = null;
+        PreparedStatement st = null;
+
+        try {
+            conn = Database.getConnection();
+            st = conn.prepareStatement(sql);
+
+            st.setString(1, veiculo.getModelo());
+            st.setString(2, veiculo.getCor());
+            st.setInt(3, veiculo.getIdMorador());
+            st.setString(4, veiculo.getPlaca());
+
+            int linhasAfetadas = st.executeUpdate();
+
+            if (linhasAfetadas > 0)  {
+                sucesso = true;
+                System.out.println("Veiculo atualizado com sucesso");
+            } else {
+                System.out.println("Veiculo nao encontrado para a atualizar");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar veiculo" + e.getMessage());
+        } finally {
+            DBUtils.closeConnection(conn, st, null);
+        }
+
+        return sucesso;
+    }
+
 }
